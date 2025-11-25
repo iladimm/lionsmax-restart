@@ -1,0 +1,74 @@
+name: AI Content Generator
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Topic for content generation'
+        required: true
+        default: 'health supplements for people over 40'
+  push:
+    branches: [ main ]
+
+jobs:
+  generate-content:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install google-generativeai
+    
+    - name: Generate content with Gemini
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: |
+        python << 'EOF'
+        import google.generativeai as genai
+        import os
+        from datetime import datetime
+        
+        # Configure Gemini
+        genai.configure(api_key=os.environ['GEMINI_API_KEY'])
+        model = genai.GenerativeModel('gemini-pro')
+        
+        # Generate content
+        prompt = """Create an SEO-optimized blog post about health supplements 
+        for people over 40. Include:
+        - Benefits of key supplements (vitamins D, B12, Omega-3, etc.)
+        - Age-specific health concerns
+        - Mobile-friendly formatting
+        - Amazon affiliate context
+        Make it 500-700 words."""
+        
+        response = model.generate_content(prompt)
+        content = response.text
+        
+        # Save content
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"content/blog_post_{timestamp}.md"
+        
+        os.makedirs('content', exist_ok=True)
+        with open(filename, 'w') as f:
+            f.write(f"# Generated Content\n\n")
+            f.write(f"**Generated at:** {datetime.now()}\n\n")
+            f.write(content)
+        
+        print(f"Content generated: {filename}")
+        EOF
+    
+    - name: Commit generated content
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add content/
+        git diff --staged --quiet || git commit -m "AI: Generate content $(date +%Y-%m-%d)"
+        git push
