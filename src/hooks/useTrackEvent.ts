@@ -11,7 +11,7 @@ export const useTrackEvent = () => {
     };
 
     const trackAffiliateClick = (productName: string, affiliateLink: string) => {
-        trackEvent('Affiliate', 'Click', productName);
+        trackEvent('Affiliate', 'Click', `${productName} - ${affiliateLink}`);
         // Optional: Send to external tracking pixel if needed
     };
 

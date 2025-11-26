@@ -17,7 +17,7 @@ export const SEO = ({
 }: SEOProps) => {
     const siteTitle = 'LionsMax Restart';
     const fullTitle = `${title} | ${siteTitle}`;
-    const siteUrl = 'https://lionsmax.com'; // Replace with actual domain
+    // const siteUrl = 'https://lionsmax.com'; // Replace with actual domain
     const url = canonical || window.location.href;
 
     return (
