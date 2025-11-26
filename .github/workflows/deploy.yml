@@ -38,8 +38,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: ./public_html/ # Adjust if your Hostinger root is different (e.g. ./domains/lionsmax.com/public_html/)
+          server-dir: ./public_html/
           protocol: ftps
+          dangerous-clean-slate: true
           exclude: |
             **/.git*
             **/.git*/**
