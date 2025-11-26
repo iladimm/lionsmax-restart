@@ -1,14 +1,52 @@
 # LionsMax Restart
 
-Mobile-first supplement store targeting adults 40+
+**Mobile-first supplement store targeting adults 40+**
 
-## Overview
-LionsMax Restart is a modern, mobile-optimized e-commerce platform focused on health supplements for adults aged 40 and above.
+LionsMax is a modern, mobile-optimized web application designed to empower adults aged 40–70 with curated, trustworthy health supplements. Inspired by industry leaders like iHerb, we prioritize specific health concerns such as Joint Health, Energy & Metabolism, and Sleep.
 
-## Tech Stack
-- React
-- TypeScript
-- Vite
+## 🚀 Mission & Vision
 
-## Getting Started
-Coming soon...
+*   **Mission:** Empower adults 40+ with trustworthy supplements for vitality.
+*   **Vision:** Become the go-to mobile hub for age-specific wellness.
+
+## 🛠 Tech Stack
+
+*   **Frontend:** React 18, Tailwind CSS
+*   **AI:** Google Gemini API (`gemini-2.5-flash`) for the AI Health Assistant
+*   **Icons:** Lucide-style SVG icons (Zero dependency)
+*   **Build:** Vite / ESM
+
+## 📱 Features
+
+*   **Mobile-First Design:** Sticky bottom navigation, touch-optimized layouts.
+*   **AI Health Assistant:** Integrated Gemini chatbot for supplement guidance (non-medical).
+*   **Amazon Associates Integration:** Compliance-ready product pages with affiliate disclosures.
+*   **Content Marketing:** Integrated blog for SEO and education.
+
+## 📦 Setup & Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/yourusername/lionsmax-restart.git
+    ```
+2.  Install dependencies (if using a build tool like Vite):
+    ```bash
+    npm install
+    ```
+3.  **Environment Variables:**
+    Create a `.env` file and add your Google Gemini API key:
+    ```env
+    API_KEY=your_google_api_key_here
+    ```
+4.  Run the application.
+
+## 📂 Project Structure
+
+*   `index.tsx`: Main React application entry point.
+*   `types.ts`: TypeScript definitions.
+*   `constants.ts`: Mock data for products and blog posts.
+*   `logo.png`: Brand logo.
+
+## © License
+
+Private Project - LionsMax Restart.

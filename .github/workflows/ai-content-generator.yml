@@ -7,8 +7,12 @@ on:
         description: 'Topic for content generation'
         required: true
         default: 'health supplements for people over 40'
-  push:
-    branches: [ main ]
+  schedule:
+    - cron: '0 9 * * 1,4' # Run every Monday and Thursday at 9am
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   generate-content:
@@ -25,11 +29,12 @@ jobs:
     
     - name: Install dependencies
       run: |
-        pip install google-generativeai
+        pip install google-generativeai pyyaml frontmatter
     
     - name: Generate content with Gemini
       env:
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        TOPIC: ${{ inputs.topic || 'health supplements for people over 40' }}
       run: |
         python << 'EOF'
         import google.generativeai as genai
@@ -40,35 +45,78 @@ jobs:
         genai.configure(api_key=os.environ['GEMINI_API_KEY'])
         model = genai.GenerativeModel('gemini-pro')
         
+        topic = os.environ['TOPIC']
+        
         # Generate content
-        prompt = """Create an SEO-optimized blog post about health supplements 
-        for people over 40. Include:
-        - Benefits of key supplements (vitamins D, B12, Omega-3, etc.)
-        - Age-specific health concerns
-        - Mobile-friendly formatting
-        - Amazon affiliate context
-        Make it 500-700 words."""
+        prompt = f"""
+        Write a comprehensive, SEO-optimized blog post about: {topic}.
+        Target audience: Adults aged 40-70.
         
-        response = model.generate_content(prompt)
-        content = response.text
+        CRITICAL OUTPUT FORMAT:
+        You must output valid Markdown with YAML frontmatter.
         
-        # Save content
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"content/blog_post_{timestamp}.md"
+        ---
+        title: [Catchy Title]
+        date: [YYYY-MM-DD]
+        excerpt: [150 char summary]
+        tags: [tag1, tag2]
+        category: [Health Category]
+        ---
         
-        os.makedirs('content', exist_ok=True)
-        with open(filename, 'w') as f:
-            f.write(f"# Generated Content\n\n")
-            f.write(f"**Generated at:** {datetime.now()}\n\n")
-            f.write(content)
+        [Content Body]
         
-        print(f"Content generated: {filename}")
+        Requirements:
+        - 800-1000 words
+        - Use H2 and H3 headers
+        - Include specific supplement recommendations (Vitamin D, Omega-3, Magnesium, etc.)
+        - Mention "Consult your doctor" disclaimer
+        - NO "As an AI language model" fluff.
+        """
+        
+        try:
+            response = model.generate_content(prompt)
+            content = response.text
+            
+            # Clean up potential markdown code blocks if the model wraps the whole thing
+            if content.startswith("```markdown"):
+                content = content.replace("```markdown", "").replace("```", "")
+            
+            # Save content
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"content/blog_post_{timestamp}.md"
+            
+            os.makedirs('content', exist_ok=True)
+            with open(filename, 'w') as f:
+                f.write(content)
+            
+            print(f"Content generated: {filename}")
+            
+            # Set output for next step
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+                fh.write(f"filename={filename}\n")
+                
+        except Exception as e:
+            print(f"Error generating content: {e}")
+            exit(1)
         EOF
     
-    - name: Commit generated content
+    - name: Validate Content
       run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add content/
-        git diff --staged --quiet || git commit -m "AI: Generate content $(date +%Y-%m-%d)"
-        git push
+        # Simple validation script (can be expanded)
+        if grep -q "As an AI language model" content/*.md; then
+          echo "Error: Content contains AI refusal/boilerplate."
+          exit 1
+        fi
+    
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v6
+      with:
+        commit-message: "AI: Generate content for ${{ inputs.topic }}"
+        title: "AI Content: ${{ inputs.topic }}"
+        body: |
+          Automated content generation for topic: **${{ inputs.topic }}**
+          
+          Please review the generated markdown file for accuracy and tone.
+        branch: ai-content-${{ github.run_id }}
+        base: main
+        labels: ai-content
