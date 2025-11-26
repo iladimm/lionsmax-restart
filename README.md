@@ -48,6 +48,8 @@ LionsMax is a modern, mobile-optimized web application designed to empower adult
 *   `src/constants.ts`: Mock data for products and blog posts.
 *   `public/logo.png`: Brand logo.
 
+
+<!-- Deployment trigger: Force FTP sync -->
 ## © License
 
 Private Project - LionsMax Restart.
