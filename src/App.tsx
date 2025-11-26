@@ -163,8 +163,8 @@ const ShopView = ({ onViewProduct }: { onViewProduct: (p: Product) => void }) =>
             key={cat}
             onClick={() => setFilter(cat)}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${filter === cat
-                ? 'bg-brand-600 text-white shadow-md'
-                : 'bg-white text-slate-600 border border-slate-200'
+              ? 'bg-brand-600 text-white shadow-md'
+              : 'bg-white text-slate-600 border border-slate-200'
               }`}
           >
             {cat}
@@ -358,7 +358,7 @@ const AssistantView = () => {
     setLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
 
       // Inject product context into the prompt
       const productContext = MOCK_PRODUCTS.map(p => `${p.name} (${p.category}): ${p.description} - Benefits: ${p.benefits.join(', ')}`).join('\n');
@@ -414,8 +414,8 @@ const AssistantView = () => {
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.role === 'user'
-                ? 'bg-brand-600 text-white rounded-br-none'
-                : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none shadow-sm'
+              ? 'bg-brand-600 text-white rounded-br-none'
+              : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none shadow-sm'
               }`}>
               {msg.text}
             </div>
