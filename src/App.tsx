@@ -67,7 +67,7 @@ const ProductCard: React.FC<{ product: Product, onClick: () => void }> = ({ prod
 
 // --- VIEW COMPONENTS ---
 
-const HomeView = ({ onViewProduct, onViewArticle, onChangeView }: { onViewProduct: (p: Product) => void, onViewArticle: (b: BlogPost) => void, onChangeView: (v: ViewState) => void }) => {
+const HomeView = ({ onViewProduct, onChangeView }: { onViewProduct: (p: Product) => void, onChangeView: (v: ViewState) => void }) => {
   return (
     <div className="animate-fade-in pb-12">
       {/* Hero Section */}
@@ -543,7 +543,7 @@ const App = () => {
 
       {/* Main Content Area */}
       <main className="flex-grow w-full bg-slate-50">
-        {view === 'home' && <HomeView onViewProduct={viewProduct} onViewArticle={viewArticle} onChangeView={setView} />}
+        {view === 'home' && <HomeView onViewProduct={viewProduct} onChangeView={setView} />}
         {view === 'shop' && <ShopView onViewProduct={viewProduct} />}
         {view === 'product' && selectedProduct && <ProductDetailView product={selectedProduct} onBack={goShop} />}
         {view === 'blog' && <BlogView onViewArticle={viewArticle} />}
