@@ -1,4 +1,4 @@
-export type Category = 'Joint Health' | 'Energy & Metabolism' | 'Sleep & Stress' | 'Multivitamins';
+export type Category = 'Joint Health' | 'Energy & Metabolism' | 'Sleep & Stress' | 'Multivitamins' | 'Anti-Aging' | 'Heart Health' | 'Skin, Hair & Nails' | 'Minerals' | 'Personal Care' | 'Vitamins' | 'Sports Nutrition';
 
 export interface Product {
   id: string;
