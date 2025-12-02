@@ -1,12 +1,7 @@
-import React from 'react';
 import UnderConstruction from './pages/UnderConstruction';
 
 function App() {
-  return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <UnderConstruction />
-    </div>
-  );
+  return <UnderConstruction />;
 }
 
 export default App;
