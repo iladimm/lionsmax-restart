@@ -1,6 +1,5 @@
 import React from 'react';
 import { Product, BlogPost, ViewState } from '../types';
-import { ProductCard } from '../components';
 import { MOCK_PRODUCTS, MOCK_BLOG_POSTS } from '../constants';
 interface HomeProps {
   onViewProduct: (p: Product) => void;
@@ -71,8 +70,10 @@ export const HomeView: React.FC<HomeProps> = ({ onViewProduct, onViewArticle, on
         <h3 className="text-lg font-bold mb-4 px-2">Trending Now</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {MOCK_PRODUCTS.slice(0, 4).map(product => (
-            <ProductCard key={product.id} product={product} onClick={() => onViewProduct(product)} />
-          ))}
+<div key={product.id} onClick={() => onViewProduct(product)} className="border border-slate-200 rounded-lg p-3 cursor-pointer hover:shadow-md transition">
+              <div className="text-sm font-bold text-slate-800">{product.name}</div>
+              <div className="text-xs text-slate-500 mt-1">★★★★★ {product.rating}</div>
+            </div>          ))}
         </div>
       </div>
 
