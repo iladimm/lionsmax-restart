@@ -1,5 +1,6 @@
 import React from 'react';
 import { Product, BlogPost, ViewState } from '../types';
+import { ProductCard } from '../components';
 import { MOCK_PRODUCTS, MOCK_BLOG_POSTS } from '../constants';
 interface HomeProps {
   onViewProduct: (p: Product) => void;
