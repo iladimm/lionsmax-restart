@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Share2, Users, Gift } from 'lucide-react';
 import { initFirstPromoter, trackFirstPromoterEvent } from '../lib/firstpromoter';
 
 interface ReferralData {
@@ -33,17 +32,16 @@ export const ReferralWidget = () => {
 
   return (
     <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-6 border border-emerald-200">
-      <div className="flex items-center gap-2 mb-4">
-        <Users className="w-6 h-6 text-emerald-600" />
+      <div className="mb-4">
         <h3 className="text-xl font-bold text-emerald-900">Earn with LionsMax Referrals</h3>
       </div>
       <div className="bg-white rounded-lg p-4 mb-4">
         <p className="text-sm text-gray-600 mb-2">Your Referral Code:</p>
         <div className="flex gap-2">
-          <code className="flex-1 bg-gray-100 px-4 py-2 rounded font-mono text-emerald-700">
+          <code className="flex-1 bg-gray-100 px-4 py-2 rounded font-mono text-emerald-700 font-bold">
             {referralData.referralCode}
           </code>
-          <button onClick={handleCopyLink} className="px-4 py-2 bg-emerald-600 text-white rounded">
+          <button onClick={handleCopyLink} className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition">
             {copied ? 'Copied!' : 'Copy'}
           </button>
         </div>
