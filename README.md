@@ -42,11 +42,14 @@ LionsMax is a modern, mobile-optimized web application designed to empower adult
 
 ## 📂 Project Structure
 
-*   `index.tsx`: Main React application entry point.
-*   `types.ts`: TypeScript definitions.
-*   `constants.ts`: Mock data for products and blog posts.
-*   `logo.png`: Brand logo.
+*   `src/main.tsx`: Main React application entry point.
+*   `src/App.tsx`: Core application component and routing.
+*   `src/types.ts`: TypeScript definitions.
+*   `src/constants.ts`: Mock data for products and blog posts.
+*   `public/logo.png`: Brand logo.
 
+
+<!-- Deployment trigger: Force FTP sync -->
 ## © License
 
 Private Project - LionsMax Restart.
