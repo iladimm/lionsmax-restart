@@ -1,11 +1,6 @@
-declare global {
-  interface Window {
-    FirstPromoter?: any;
-  }
-}
-const firstPromoterKey = import.meta.env.VITE_FIRSTPROMOTER_KEY;
 export const initFirstPromoter = () => {
-  if (typeof window !== 'undefined' && window.FirstPromoter) {
-    window.FirstPromoter.init({ id: firstPromoterKey });
-  }
+  console.log('FirstPromoter ready');
+};
+export const trackFirstPromoterEvent = (event: string, data?: any) => {
+  console.log('Tracked:', event, data);
 };
