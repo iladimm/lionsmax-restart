@@ -1,5 +1,14 @@
+-- SCRIPT DE NETTOYAGE ET RECRÉATION DES TABLES D'AFFILIATION
+-- Exécutez ce script pour supprimer les anciennes tables et recréer proprement
+
+-- Supprimer les objets existants dans le bon ordre (inverse de la création)
+DROP VIEW IF EXISTS affiliate_stats CASCADE;
+DROP TABLE IF EXISTS affiliate_conversions CASCADE;
+DROP TABLE IF EXISTS affiliate_clicks CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
 -- Table utilisateurs (créée en premier car référencée par affiliate_clicks)
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
   name TEXT,
@@ -8,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Table pour tracker les clics d'affiliation
-CREATE TABLE IF NOT EXISTS affiliate_clicks (
+CREATE TABLE affiliate_clicks (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   product_name TEXT NOT NULL,
   external_link TEXT NOT NULL,
@@ -25,7 +34,7 @@ CREATE TABLE IF NOT EXISTS affiliate_clicks (
 );
 
 -- Table pour tracker les conversions/commissions
-CREATE TABLE IF NOT EXISTS affiliate_conversions (
+CREATE TABLE affiliate_conversions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   click_id UUID REFERENCES affiliate_clicks(id) ON DELETE CASCADE,
   product_name TEXT NOT NULL,
@@ -40,14 +49,14 @@ CREATE TABLE IF NOT EXISTS affiliate_conversions (
 );
 
 -- Index pour améliorer les performances
-CREATE INDEX IF NOT EXISTS idx_affiliate_clicks_product ON affiliate_clicks(product_name);
-CREATE INDEX IF NOT EXISTS idx_affiliate_clicks_date ON affiliate_clicks(clicked_at DESC);
-CREATE INDEX IF NOT EXISTS idx_affiliate_clicks_affiliate ON affiliate_clicks(affiliate_id);
-CREATE INDEX IF NOT EXISTS idx_affiliate_conversions_status ON affiliate_conversions(status);
-CREATE INDEX IF NOT EXISTS idx_affiliate_conversions_date ON affiliate_conversions(converted_at DESC);
+CREATE INDEX idx_affiliate_clicks_product ON affiliate_clicks(product_name);
+CREATE INDEX idx_affiliate_clicks_date ON affiliate_clicks(clicked_at DESC);
+CREATE INDEX idx_affiliate_clicks_affiliate ON affiliate_clicks(affiliate_id);
+CREATE INDEX idx_affiliate_conversions_status ON affiliate_conversions(status);
+CREATE INDEX idx_affiliate_conversions_date ON affiliate_conversions(converted_at DESC);
 
 -- Vue pour statistiques agrégées
-CREATE OR REPLACE VIEW affiliate_stats AS
+CREATE VIEW affiliate_stats AS
 SELECT 
   DATE_TRUNC('day', ac.clicked_at) as date,
   ac.affiliate_id,

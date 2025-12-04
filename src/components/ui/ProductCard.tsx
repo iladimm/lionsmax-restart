@@ -1,6 +1,7 @@
 import React from 'react';
 import { Product } from '../../types';
 import { Icons } from './Icons';
+import { AffiliateButton } from './AffiliateButton';
 
 interface ProductCardProps {
     product: Product;
@@ -9,9 +10,27 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, showOldPrice = false }) => {
+    // Détecter la plateforme d'affiliation automatiquement
+    const detectPlatform = (link: string): 'iherb' | 'amazon' | 'custom' => {
+        if (link.includes('iherb.com')) return 'iherb';
+        if (link.includes('amazon')) return 'amazon';
+        return 'custom';
+    };
+
+    const platform = detectPlatform(product.affiliateLink);
+
+    // Empêcher la propagation du clic sur le bouton pour éviter le conflit avec onClick de la carte
+    const handleCardClick = (e: React.MouseEvent) => {
+        // Ne trigger onClick que si ce n'est pas un clic sur le bouton
+        if ((e.target as HTMLElement).closest('.affiliate-button-container')) {
+            return;
+        }
+        onClick();
+    };
+
     return (
         <div
-            onClick={onClick}
+            onClick={handleCardClick}
             className="bg-white rounded-lg border border-slate-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer flex flex-col h-full min-w-[160px] md:min-w-[200px]"
         >
             <div className="relative">
@@ -47,9 +66,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, show
                         )}
                     </div>
                     {product.isPrime && <span className="text-[10px] text-blue-600 font-bold flex items-center gap-0.5"><Icons.Check /> Prime</span>}
-                    <button className="w-full mt-2 bg-slate-100 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-200 transition-colors">
-                        Add to Cart
-                    </button>
+                    <div className="affiliate-button-container mt-2" onClick={(e) => e.stopPropagation()}>
+                        <AffiliateButton
+                            productName={product.name}
+                            externalLink={product.affiliateLink}
+                            platform={platform}
+                            variant="secondary"
+                            className="w-full text-xs py-2"
+                        >
+                            Acheter
+                        </AffiliateButton>
+                    </div>
                 </div>
             </div>
         </div>
