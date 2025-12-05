@@ -2,9 +2,11 @@
 
 > **Empowering health and vitality for the 40+ community through personalized nutrition, affiliate recommendations, and AI-powered guidance.**
 
-[![Deploy Status](https://github.com/iladimm/lionsmax-restart/workflows/Deploy%20to%20Production/badge.svg)](https://github.com/iladimm/lionsmax-restart/actions)
+[![Deploy Status](https://github.com/iladimm/lionsmax-restart/workflows/CI/badge.svg)](https://github.com/iladimm/lionsmax-restart/actions)
+[![Security Scan](https://github.com/iladimm/lionsmax-restart/workflows/Security%20Scan/badge.svg)](https://github.com/iladimm/lionsmax-restart/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Version](https://img.shields.io/badge/version-0.1.0-blue)
+[![Code Style: Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 ---
 
@@ -17,6 +19,25 @@
 - 💰 **Affiliate Tracking System** - Complete click and conversion tracking with Supabase
 - 📊 **Analytics Dashboard** - Track performance and optimize recommendations
 - 🚀 **SEO Optimized** - Built for discoverability and organic growth
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    User[User] -->|Access| App[React SPA]
+    App -->|Auth & Data| Supabase[Supabase]
+    App -->|AI Queries| Gemini[Google Gemini API]
+    
+    subgraph "Affiliate System"
+        App -->|Track Click| Supabase
+        App -->|Redirect| Amazon[Amazon]
+        App -->|Redirect| iHerb[iHerb]
+    end
+```
+
+See [Architecture Overview](docs/architecture/overview.md) for details.
 
 ---
 
@@ -89,6 +110,19 @@
 
 ---
 
+## ❓ FAQ
+
+**Q: How do I add a new affiliate product?**
+A: Add the product details to `src/data/products.ts`. The `AffiliateButton` will automatically handle tracking.
+
+**Q: Why isn't the AI assistant working?**
+A: Ensure your `VITE_GEMINI_API_KEY` is correctly set in `.env.local` and has quota available.
+
+**Q: How do I deploy to production?**
+A: Push to the `main` branch. GitHub Actions will automatically build and deploy to Hostinger via FTP.
+
+---
+
 ## 🏗️ Project Structure
 
 ```
@@ -119,11 +153,13 @@ lionsmax-restart/
 Comprehensive documentation is available in the `/docs` directory:
 
 ### For Developers
+- **[Getting Started](docs/guides/getting-started.md)** - First steps
 - **[Development Guide](docs/guides/development.md)** - Local setup and development workflow
 - **[Testing Guide](docs/guides/testing.md)** - How to test the affiliate system
 - **[Deployment Guide](docs/guides/deployment.md)** - Deploy to production
 
 ### Technical Documentation
+- **[Architecture Overview](docs/architecture/overview.md)** - System design
 - **[Affiliate System](docs/architecture/affiliate-system.md)** - How tracking and commissions work
 - **[Database Schema](database/README.md)** - Database structure and setup
 - **[API Documentation](docs/api/)** - API endpoints and usage
