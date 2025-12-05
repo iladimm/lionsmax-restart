@@ -96,3 +96,5 @@ export const HomeView: React.FC<HomeProps> = ({ onViewProduct, onViewArticle, on
     </div>
   );
 };
+
+export default HomeView;
