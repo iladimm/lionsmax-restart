@@ -1,7 +1,5 @@
-import UnderConstruction from './pages/UnderConstruction';
-
+import HomePage from './pages/HomePage';
 function App() {
-  return <UnderConstruction />;
-}
+  return <HomePage />;}
 
 export default App;
