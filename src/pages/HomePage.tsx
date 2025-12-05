@@ -97,4 +97,3 @@ export const HomePage: React.FC<HomeProps> = ({ onViewProduct, onViewArticle, on
   );
 };
 export default HomePage;
-git add src/pages/HomePage.tsx && git commit -m "Merge remote branch and resolve conflict"
