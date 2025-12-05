@@ -7,7 +7,7 @@ interface HomeProps {
   onChangeView: (v: ViewState) => void;
 }
 
-export const HomeView: React.FC<HomeProps> = ({ onViewProduct, onViewArticle, onChangeView }) => {
+export const HomePage: React.FC<HomeProps> = ({ onViewProduct, onViewArticle, onChangeView }) => {
   const featuredPost = MOCK_BLOG_POSTS.find(p => p.isFeatured);
   
   return (
@@ -96,3 +96,4 @@ export const HomeView: React.FC<HomeProps> = ({ onViewProduct, onViewArticle, on
     </div>
   );
 };
+export default HomePage;
