@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
 import HomePage from './pages/HomePage';
 import { Product, BlogPost, ViewState } from './types';
 
 function App() {
-  const [view, setView] = useState<ViewState>('shop');
-
   const handleViewProduct = (product: Product) => {
     console.log('Viewing product:', product);
   };
@@ -14,7 +11,7 @@ function App() {
   };
 
   const handleChangeView = (newView: ViewState) => {
-    setView(newView);
+    console.log('Changing view to:', newView);
   };
 
   return (
