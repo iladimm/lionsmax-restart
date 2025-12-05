@@ -1,31 +1,51 @@
-import React from "react"
-import { trackAffiliateClick } from "../hooks/useAffiliate"
+import React from 'react';
+import { trackAffiliateClick, generateIHerbLink, generateAffiliateLink } from '../hooks/useAffiliate';
 
 interface AffiliateButtonProps {
-  product: string
-  iherbLink: string
-  commission?: string
+  productName: string;
+  productId: string;
+  externalLink: string;
+  affiliateRef?: string;
+  affiliateId?: string;
+  commissionPercentage?: number;
+  className?: string;
+  buttonText?: string;
+  platform?: 'iherb' | 'amazon' | 'custom';
 }
 
-export const AffiliateButton: React.FC<AffiliateButtonProps> = ({
-  product,
-  iherbLink,
-  commission,
+const AffiliateButton: React.FC<AffiliateButtonProps> = ({
+  productName,
+  productId,
+  externalLink,
+  affiliateRef = 'lionsmax',
+  affiliateId = 'direct',
+  commissionPercentage = 5,
+  className = 'bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors',
+  buttonText = `Acheter ${productName} (${commissionPercentage}% comm.)`,
+  platform = 'custom',
 }) => {
-  const handleClick = () => {
-    trackAffiliateClick(product, iherbLink)
-    window.open(iherbLink, "_blank", "noopener,noreferrer")
-  }
+  const handleClick = async () => {
+    // Track the click in Supabase
+    const finalLink = 
+      platform === 'iherb'
+        ? generateIHerbLink(productId, affiliateRef)
+        : generateAffiliateLink(externalLink, productId, affiliateRef);
+
+    await trackAffiliateClick(productName, finalLink, affiliateId);
+
+    // Open the affiliate link
+    window.open(finalLink, '_blank');
+  };
 
   return (
     <button
       onClick={handleClick}
-      className="inline-flex items-center justify-center rounded-lg bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
+      className={className}
+      aria-label={`Buy ${productName}`}
     >
-      Acheter sur iHerb
-      {commission ? ` (${commission} commission)` : ""}
+      {buttonText} →
     </button>
-  )
-}
+  );
+};
 
-export default AffiliateButton
+export default AffiliateButton;
